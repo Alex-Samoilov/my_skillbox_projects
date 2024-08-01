@@ -2,15 +2,14 @@
 #include <vector>
 using namespace std;
 
-bool comparison (int matrix_1[4][4], int matrix_2[4][4], bool &equally) {
+bool comparison (int matrix_1[4][4], int matrix_2[4][4]) {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             if (matrix_1[i][j] != matrix_2[i][j]) {
-                equally = false;
-                return equally;
+                return false;
             }
         }
-    } return equally;
+    } return true;
 }
 
 int main () {
@@ -30,11 +29,10 @@ int main () {
         }
     }
 
-    bool equally = true;
+    bool equally = comparison(matrix_1, matrix_2);
 
-    comparison(matrix_1, matrix_2, equally);
 
-    if (equally == false) {
+    if (!equally) {
         cout << "The matrices are not equal" << endl;
     } else {
         for (int i =0; i < 4; i++) {
