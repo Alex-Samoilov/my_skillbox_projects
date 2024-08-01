@@ -22,7 +22,8 @@ void print_wrapper (bool wrapper [12][12]) {
     
 }
 
-void pop_wrapper (bool wrapper[12][12], int row_1, int col_1, int row_2, int col_2) {
+void pop_wrapper (bool wrapper[12][12]) {
+    int row_1, col_1, row_2, col_2;
     cout << "Input coordinates left corner!\n";
         cout << "Row: ";
         cin >> row_1;
@@ -57,8 +58,7 @@ void pop_wrapper (bool wrapper[12][12], int row_1, int col_1, int row_2, int col
 }
 
 int main () {
-    int row_1, col_1;
-    int row_2, col_2;
+
     bool wrapper[12][12];
     initial_wrapper(wrapper);
     print_wrapper(wrapper);
@@ -68,7 +68,7 @@ int main () {
             if(wrapper[i][j] == false) {
                 continue;
             } else {
-                pop_wrapper (wrapper, row_1, col_1, row_2, col_2);
+                pop_wrapper (wrapper);
                 print_wrapper(wrapper);
             }
         } 
