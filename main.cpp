@@ -2,14 +2,14 @@
 #include <vector>
 using namespace std;
 
-void seating(int table [2][6][3]) {
+void seating(int chairs[2][6], int plates[2][6], int cutlery[2][6]) {
     for (int i = 0; i < 2; i++) {
         cout << "Side " << i + 1 << ":" << endl;
         for (int j = 0; j < 6; j++) {
         cout << "Seat " << j + 1  
-        << "---> Chairs - " << table[i][j][2]  
-        << " Plates - " << table[i][j][1]  
-        << " Cutlery - " << table[i][j][0] << endl;
+        << "---> Chairs - " << chairs[i][j]  
+        << " Plates - " << plates[i][j] 
+        << " Cutlery - " << cutlery[i][j] << endl;
         }
     }
 }
@@ -17,29 +17,33 @@ void seating(int table [2][6][3]) {
 int main() {
     cout << "Initial seating" << endl;
 
-    int table [2][6][3];
+    int chairs[2][6];
+    int plates[2][6];
+    int cutlery[2][6];
+
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 6; j++) {
-            table [i][j][0] = 3; // Cutlery
-            table [i][j][1] = 2; // Plates
-            table [i][j][2] = 1; // 
+            cutlery [i][j] = 3;
+            plates [i][j] = 2; 
+            chairs [i][j] = 1; 
 
             if (i == 0 && j == 0 || i == 1 && j == 0) {
-                table[i][j][0] += 1;
-                table[i][j][1] += 1;
+                cutlery [i][j] += 1;
+                plates [i][j] += 1;
             }
         }
     }
 
-    seating (table);
+    seating (chairs, plates, cutlery);
 
     cout << endl;
 
-    table [0][4][2] *= 2;
-    table [0][0][0] -= 1;
-    table [0][0][1] -= 1;
+    chairs [0][4] *= 2;
+    cutlery [1][2] -= 1;
+    cutlery [0][0] -= 1;
+    plates [0][0] -= 1;
     cout << "After all incidents" << endl;
-    seating (table);
+    seating (chairs, plates, cutlery);
 
 }
 
@@ -68,6 +72,3 @@ packages[0][0] +=1; // packages[0][0] хранит в себе цифру 2, и 
 Что оценивается
 Все действия внутри массива соответствуют условию
 */
-
-
-//my_skillbox_projects
