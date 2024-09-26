@@ -82,9 +82,9 @@ int main() {
       string answer;
       getline(cin, answer);
       inputData << answer;
-      string powerSwitch, outlets, innerLight, motion, indoorTemp, outdoorTemp;
+      string powerSwitch, outlets, innerLight, motion;
       int insideTemperature = 0, outsideTemperature = 0;
-      inputData >> powerSwitch >> outlets >> innerLight >> motion >> indoorTemp >> outdoorTemp;
+      inputData >> powerSwitch >> outlets >> innerLight >> motion >> insideTemperature >> outsideTemperature;
       if (!stob(powerSwitch)) {
         smartHomeState = setSwitchState(smartHomeState, POWER_SWITCH, stob(powerSwitch));
         smartHomeState = setSwitchState(smartHomeState, OUTLETS, stob(powerSwitch));
