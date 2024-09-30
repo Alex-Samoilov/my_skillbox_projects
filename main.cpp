@@ -11,15 +11,12 @@ enum switches {
   WATER_HEATER = 32,
   AIR_CONDITIONER = 64
 };
-
 int setSwitchState(int state, switches key, bool isOn = true) {
   return isOn ? (state | key) : (state & (~key));
 };
-
 bool stob(string text) {
   return text == "YES" || text == "yes" || text == "Y" || text == "y" || text == "ON" || text == "on";
 }
-
 void printEvents(int currentState, int changes, int time) {
   cout << "-----Changes report------------------------------------------------" << endl;
   for (int i = POWER_SWITCH; i <= AIR_CONDITIONER; i <<= 1) {
@@ -70,56 +67,37 @@ int main() {
     for (int hour = 0; hour <= 23; hour++) {
       cout << "Current day: " << day << " Current time: " << hour << ":00" << endl;
       int previousState = smartHomeState;
-      stringstream inputData;
-      cout << "You must enter information for Smart House in one string by next order:" << endl;
-      cout << "State of Master Power switch (ON/OFF)" << endl;
-      cout << "State of house outlets (ON/OFF)" << endl;
-      cout << "State of light inside house (ON/OFF)" << endl;
-      cout << "Any movements outside house (YES/NO)" << endl;
-      cout << "Air temperature inside house (integer value)" << endl;
-      cout << "Air temperature outside house (integer value)" << endl;
-      cout << "Enter the information: ";
-      string answer;
-      getline(cin, answer);
-      inputData << answer;
-      string powerSwitch, outlets, innerLight, motion;
-      int insideTemperature = 0, outsideTemperature = 0;
-      inputData >> powerSwitch >> outlets >> innerLight >> motion >> insideTemperature >> outsideTemperature;
-      if (!stob(powerSwitch)) {
-        smartHomeState = setSwitchState(smartHomeState, POWER_SWITCH, stob(powerSwitch));
-        smartHomeState = setSwitchState(smartHomeState, OUTLETS, stob(powerSwitch));
-        smartHomeState = setSwitchState(smartHomeState, INNER_LIGHT, stob(powerSwitch));
-        smartHomeState = setSwitchState(smartHomeState, OUTER_LIGHT, stob(powerSwitch));
-        smartHomeState = setSwitchState(smartHomeState, HEATING, stob(powerSwitch));
-        smartHomeState = setSwitchState(smartHomeState, WATER_HEATER, stob(powerSwitch));
-        smartHomeState = setSwitchState(smartHomeState, AIR_CONDITIONER, stob(powerSwitch));
-      } else {
-        smartHomeState = setSwitchState(smartHomeState, POWER_SWITCH, stob(powerSwitch));
-        smartHomeState = setSwitchState(smartHomeState, OUTLETS, stob(outlets));
-        smartHomeState = setSwitchState(smartHomeState, INNER_LIGHT, stob(innerLight));
-        if (insideTemperature < 22) {
-          smartHomeState = setSwitchState(smartHomeState, HEATING);
-        }
-        if (insideTemperature <= 25) {
-          smartHomeState = setSwitchState(smartHomeState, AIR_CONDITIONER, false);
-        }
-        if (insideTemperature >= 25) {
-          smartHomeState = setSwitchState(smartHomeState, HEATING, false);
-        }
-        if (insideTemperature >= 30) {
-          smartHomeState = setSwitchState(smartHomeState, AIR_CONDITIONER);
-        }
-        if (outsideTemperature < 0) {
-          smartHomeState = setSwitchState(smartHomeState, WATER_HEATER);
-        } else if (outsideTemperature > 5) {
-          smartHomeState = setSwitchState(smartHomeState, WATER_HEATER, false);
-        }
-        if (hour < 5 || hour > 16) {
-          smartHomeState = setSwitchState(smartHomeState, OUTER_LIGHT, stob(motion));
-        } else {
-          smartHomeState = setSwitchState(smartHomeState, OUTER_LIGHT, false);
-        }
+      cout << "Enter the information (outside temperature, inside temperature, movement outside (yes/no), light inside (on/off)): ";
+      string inputData;
+      getline(cin, inputData);
+      stringstream ss(inputData);
+      int outsideTemperature, insideTemperature;
+      string motion, lightInside;
+      ss >> outsideTemperature >> insideTemperature >> motion >> lightInside;
+      // Обработка данных
+      if (insideTemperature < 22) {
+        smartHomeState = setSwitchState(smartHomeState, HEATING);
       }
+      if (insideTemperature <= 25) {
+        smartHomeState = setSwitchState(smartHomeState, AIR_CONDITIONER, false);
+      }
+      if (insideTemperature >= 25) {
+        smartHomeState = setSwitchState(smartHomeState, HEATING, false);
+      }
+      if (insideTemperature >= 30) {
+        smartHomeState = setSwitchState(smartHomeState, AIR_CONDITIONER);
+      }
+      if (outsideTemperature < 0) { 
+        smartHomeState = setSwitchState(smartHomeState, WATER_HEATER);
+      } else if (outsideTemperature > 5) { 
+        smartHomeState = setSwitchState(smartHomeState, WATER_HEATER, false);
+      }
+      if (hour < 5 || hour > 16) {
+        smartHomeState = setSwitchState(smartHomeState, OUTER_LIGHT, stob(motion));
+      } else {
+        smartHomeState = setSwitchState(smartHomeState, OUTER_LIGHT, false);
+      }
+      smartHomeState = setSwitchState(smartHomeState, INNER_LIGHT, stob(lightInside));
       int diff = previousState ^ smartHomeState;
       printEvents(smartHomeState, diff, hour);
     }
